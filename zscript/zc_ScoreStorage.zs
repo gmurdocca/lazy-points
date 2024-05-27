@@ -41,6 +41,8 @@ class zc_ScoreStorage
       isLatests[i] = false;
     }
 
+    console.Printf("Final score: %d\n", score);
+
     for (int i = 0; i < N_TOP; ++i)
     {
       if (score > scores[i])
@@ -141,6 +143,8 @@ class zc_ScoreStorage
     for (int i = 0; i < N_TOP; ++i)
     {
       result.appendFormat("%d\n%d\n%s\n", scores[i], isLatests[i], names[i]);
+        if ( isLatests[i] == 1 )
+            console.Printf("Final score: %d\n", scores[i]);
     }
     return result;
   }
