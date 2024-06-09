@@ -1,24 +1,24 @@
 #!/bin/bash
 
 draw_logo() {
-    echo '                     =================     ===============     ===============   ========  ========'
-    echo '                     ||. . ._____. . .|| ||. . ._____. . .|| ||. . ._____. . .|| || . . .\/ . . .||'
-    echo '                     || . .||   ||. . || || . .||   ||. . || || . .||   ||. . || ||. . . . . . . ||'
-    echo '                     ||. . ||   || . .|| ||. . ||   || . .|| ||. . ||   || . .|| || . | . . . . .||'
-    echo '                     || . .||   ||. _-|| ||-_ .||   ||. . || || . .||   ||. _-|| ||-_.|\ . . . . ||'
-    echo '                     ||. . ||   ||-^  || ||  `-||   || . .|| ||. . ||   ||-^  || ||  `|\_ . .|. .||'
-    echo '                     || . _||   ||    || ||    ||   ||_ . || || . _||   ||    || ||   |\ `-_/| . ||'
-    echo '                     ||_-^ ||  .|/    || ||    \|.  || `-_|| ||_-^ ||  .|/    || ||   | \  / |-_.||'
-    echo '                     ||    ||_-^      || ||      `-_||    || ||    ||_-^      || ||   | \  / |  `||'
-    echo '                     ||    `^         || ||         `^    || ||    `^         || ||   | \  / |   ||'
-    echo '                     ||            .===^ `===.         .===^.`===.         .===^ /==. |  \/  |   ||'
-    echo '                     ||         .==^   \_|-_ `===. .===^   _|_   `===. .===^ _-|/   `==  \/  |   ||'
-    echo '                     ||      .==^    _-^    `-_  `=^    _-^   `-_    `=^  _-^   `-_  /|  \/  |   ||'
-    echo '                     ||   .==^    _-^          ^-__\._-^         ^-_./__-^         `^ |. /|  |   ||'
-    echo '                     ||.==^    _-^                                                     `^ |  /==.||'
-    echo "                     ==^    _-^         -=] TPS Nothing But 90s Trivia Night [=-           \\/   \`=="
-    echo '                     \   _-^                                                                `-_   /'
-    echo '                     `^^        -=-=-=-=  T O P   1 0   H I G H    S C O R E S  =-=-=-=-      ``^^'
+    echo '                 =================     ===============     ===============   ========  ========'
+    echo '                 ||. . ._____. . .|| ||. . ._____. . .|| ||. . ._____. . .|| || . . .\/ . . .||'
+    echo '                 || . .||   ||. . || || . .||   ||. . || || . .||   ||. . || ||. . . . . . . ||'
+    echo '                 ||. . ||   || . .|| ||. . ||   || . .|| ||. . ||   || . .|| || . | . . . . .||'
+    echo '                 || . .||   ||. _-|| ||-_ .||   ||. . || || . .||   ||. _-|| ||-_.|\ . . . . ||'
+    echo '                 ||. . ||   ||-^  || ||  `-||   || . .|| ||. . ||   ||-^  || ||  `|\_ . .|. .||'
+    echo '                 || . _||   ||    || ||    ||   ||_ . || || . _||   ||    || ||   |\ `-_/| . ||'
+    echo '                 ||_-^ ||  .|/    || ||    \|.  || `-_|| ||_-^ ||  .|/    || ||   | \  / |-_.||'
+    echo '                 ||    ||_-^      || ||      `-_||    || ||    ||_-^      || ||   | \  / |  `||'
+    echo '                 ||    `^         || ||         `^    || ||    `^         || ||   | \  / |   ||'
+    echo '                 ||            .===^ `===.         .===^.`===.         .===^ /==. |  \/  |   ||'
+    echo '                 ||         .==^   \_|-_ `===. .===^   _|_   `===. .===^ _-|/   `==  \/  |   ||'
+    echo '                 ||      .==^    _-^    `-_  `=^    _-^   `-_    `=^  _-^   `-_  /|  \/  |   ||'
+    echo '                 ||   .==^    _-^          ^-__\._-^         ^-_./__-^         `^ |. /|  |   ||'
+    echo '                 ||.==^    _-^                                                     `^ |  /==.||'
+    echo "                 ==^    _-^         -=] TPS Nothing But 90s Trivia Night [=-           \\/   \`=="
+    echo '                 \   _-^                                                                `-_   /'
+    echo '                 `^^        -=-=-=-=  T O P   1 0   H I G H    S C O R E S  =-=-=-=-      ``^^'
 
 }
 
@@ -32,12 +32,12 @@ WHITE='\033[0;37m'
 RESET='\033[0m'
 
 finish_bonus=500
+version=1.1
+name=lazy-points
+filename=$name-$version.pk3
 
 if [ "$1" == "build" ]; then
 
-    name=lazy-points
-    version=$(git describe --abbrev=0 --tags)
-    filename=$name-$version.pk3
 
     rm -f $filename
 
@@ -45,7 +45,7 @@ if [ "$1" == "build" ]; then
         zscript/*.zs \
         *.md  \
         *.txt \
-        *.zs  \
+        *.zs
     echo pk3 written to $filename
     exit
 fi
@@ -57,17 +57,17 @@ while true; do
     skip_score=0
     # show high scores
     draw_logo
-    echo -e "\n                                          Rank:\t\tScore:\tName:\n"
+    echo -e "\n                                      Rank:\tScore:\tName:\n"
     sort -k1,1nr high_scores.txt | awk '{print NR, $0}' | head -n10 | while read l; do
         rank=$(echo $l | awk '{print $1}')
         score=$(echo $l | awk '{print $2}')
         name=$(echo $l | awk '{for (i=3; i<=NF; i++) printf $i (i==NF?RS:OFS)}')
-        echo -e "                                          $rank\t\t$score\t$name"
+        echo -e "                                      $rank\t\t$score\t$name"
     done
     echo ""
-    echo "                                          Welcome! Enter your name to play: "
+    echo "                                      Welcome! Enter your name to play: "
     echo ""
-    echo -n "                                          "
+    echo -n "                                      "
     read name
     if [ -z "$name" ]; then
         exec $0
@@ -76,7 +76,7 @@ while true; do
 
     # sanitize name
     name=$(echo "$name" | tr -cd '[:print:]' | cut -c1-30)
-    echo "                                        Hi $name, loading DooM... good luck!"
+    echo "                                    Hi $name, loading DooM... good luck!"
     out_file=/tmp/doom.out
     rm -f $out_file
     rm -f gzdoom.ini
@@ -84,7 +84,7 @@ while true; do
     iwad='./doom.wad'
 
     stdbuf -o0 -- gzdoom \
-        -file lazy-points-0.4.pk3 \
+        -file $filename \
         -iwad $iwad \
         -warp 1 1 \
         -config ./gzdoom.ini \
@@ -111,10 +111,10 @@ while true; do
                 # add finish_bonus since they fionished the map
                 score=$(( $score + $finish_bonus ))
                 echo -e "$score\t$name" >> high_scores.txt
-                echo "                           *****************************************************************"
-                echo "                                 $name, congratulations for completing the level!"
-                echo "                                             Your final score was $score"
-                echo "                           *****************************************************************"
+                echo "                       *****************************************************************"
+                echo "                             $name, congratulations for completing the level!"
+                echo "                                         Your final score was $score"
+                echo "                       *****************************************************************"
                 echo ""
             fi
             break
@@ -125,11 +125,11 @@ while true; do
             kill $gzdoom_pid
             wait $gzdoom_pid >/dev/null 2>&1
             clear
-            echo "                               XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-            echo "                                            Well, well, well... A cheater eh?"
-            echo "                                       Congratulations on remembering the cheat codes,"
-            echo "                                             but your run has been terminated!"
-            echo "                               XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+            echo "                          XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+            echo "                                       Well, well, well... A cheater eh?"
+            echo "                                  Congratulations on remembering the cheat codes,"
+            echo "                                        but your run has been terminated!"
+            echo "                          XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
             break
         fi
 
@@ -141,9 +141,9 @@ while true; do
             kill $gzdoom_pid
             wait $gzdoom_pid >/dev/null 2>&1
             clear
-            echo "                               =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
-            echo "                                    Sorry, we're playing map E1M1 only for this challenge."
-            echo "                               =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
+            echo "                          =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
+            echo "                               Sorry, we're playing map E1M1 only for this challenge."
+            echo "                          =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
 
             break
         fi
@@ -158,9 +158,9 @@ while true; do
             kill $gzdoom_pid
             wait $gzdoom_pid >/dev/null 2>&1
             clear
-            echo "                               =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
-            echo "                                             You died! Your final score was $score..."
-            echo "                               =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
+            echo "                          =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
+            echo "                                        You died! Your final score was $score..."
+            echo "                          =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
             break
         fi
 
