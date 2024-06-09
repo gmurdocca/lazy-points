@@ -25,6 +25,7 @@ class zc_View
   {
     _player       = players[consolePlayer];
     _interpolator = DynamicValueInterpolator.Create(0, 0.1, 1, 1000000);
+    _current_score = "0";
 
     return self;
   }
@@ -46,9 +47,16 @@ class zc_View
     _interpolator.update(_player.mo.score);
 
     String scoreString = String.Format("%d", _interpolator.getValue());
+
+    if (scoreString != _current_score){
+        console.Printf("Current score: %s\n", scoreString);
+        _current_score = scoreString;
+    }
+
     int    scoreWidth  = _font.StringWidth(scoreString) * CleanXFac_1;
     int    x           = (Screen.GetWidth() - scoreWidth) / 2;
     Screen.DrawText(_font, Font.CR_Blue, x, y, scoreString, DTA_CleanNoMove_1, true);
+
 
     return lineHeight * 2;
   }
@@ -64,5 +72,7 @@ class zc_View
   private PlayerInfo _player;
 
   private DynamicValueInterpolator _interpolator;
+
+  private String _current_score;
 
 } // class zc_View
