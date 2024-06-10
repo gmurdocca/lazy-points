@@ -68,6 +68,7 @@ while true; do
     # init new game
     name=$(echo "$name" | tr -cd '[:print:]' | cut -c1-30)
     echo "                                    Hi $name, loading DooM... good luck!"
+    espeak "Welcome. And good luck!"
     out_file=/tmp/doom.out
     echo "Current score: 0" > $out_file
     rm -f gzdoom.ini
@@ -103,6 +104,7 @@ while true; do
                 echo "                                         Your final score was $score"
                 echo "                       *****************************************************************"
                 echo ""
+                espeak "Congratulations, your final score was $score"
             fi
             break
         fi
@@ -119,6 +121,7 @@ while true; do
             echo "                                  Congratulations on remembering the cheat codes,"
             echo "                                        but your run has been terminated!"
             echo "                          XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+            espeak "Congratulations on remembering the cheat codes, but your run has been terminated!"
             break
         fi
 
@@ -133,7 +136,7 @@ while true; do
             echo "                          =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
             echo "                               Sorry, we're playing map E1M1 only for this challenge."
             echo "                          =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
-
+            espeak "We are playing episode 1 map 1 only. Sorry."
             break
         fi
 
@@ -150,6 +153,7 @@ while true; do
             echo "                          =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
             echo "                                        You died! Your final score was $score..."
             echo "                          =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
+            espeak "You died! Your final score was $score"
             break
         fi
 
@@ -168,6 +172,7 @@ while true; do
             echo "                          =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
             echo "                               You ran out of time! Your final score was $score..."
             echo "                          =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
+            espeak "You ran out of time! Your final score was $score"
             break
         fi
 
