@@ -1,5 +1,11 @@
 #!/bin/bash
 
+version=1.1
+name=lazy-points
+filename=$name-$version.pk3
+time_limit=180
+finish_bonus=500
+
 draw_logo() {
     echo '                 =================     ===============     ===============   ========  ========'
     echo '                 ||. . ._____. . .|| ||. . ._____. . .|| ||. . ._____. . .|| || . . .\/ . . .||'
@@ -21,20 +27,6 @@ draw_logo() {
     echo '                 `^^        -=-=-=-=  T O P   1 0   H I G H    S C O R E S  =-=-=-=-      ``^^'
 
 }
-
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[0;33m'
-BLUE='\033[0;34m'
-MAGENTA='\033[0;35m'
-CYAN='\033[0;36m'
-WHITE='\033[0;37m'
-RESET='\033[0m'
-
-finish_bonus=500
-version=1.1
-name=lazy-points
-filename=$name-$version.pk3
 
 if [ "$1" == "build" ]; then
 
@@ -65,9 +57,8 @@ while true; do
         echo -e "                                      $rank \t$score\t$name"
     done
     echo ""
-    echo "                                      Welcome! Enter your name to play: "
-    echo ""
-    echo -n "                                      "
+    echo    "                               Max time limit per game: $(($time_limit / 60)) minutes"
+    echo -n "                               Enter your name to play: "
     read name
     if [ -z "$name" ]; then
         exec $0
@@ -83,6 +74,7 @@ while true; do
     cp gzdoom_main.ini gzdoom.ini
     iwad='./doom.wad'
 
+    start_time=$(date +%s)
     stdbuf -o0 -- gzdoom \
         -file $filename \
         -iwad $iwad \
@@ -120,7 +112,9 @@ while true; do
             break
         fi
 
-        if grep -Eq "Degreelessness|Very Happy Ammo Added|No Clipping Mode" $out_file; then
+
+
+        if grep -Eq "Degreelessness|Very Happy Ammo Added|No Clipping Mode|Power-up Toggled" $out_file; then
             skip_score=1
             kill $gzdoom_pid
             wait $gzdoom_pid >/dev/null 2>&1
@@ -160,6 +154,24 @@ while true; do
             clear
             echo "                          =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
             echo "                                        You died! Your final score was $score..."
+            echo "                          =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
+            break
+        fi
+
+        # detect death and reset
+        current_timestamp=$(date +%s)
+        duration=$(($current_timestamp - $start_time))
+        if [ $duration -gt $time_limit ]; then
+            score=$(cat $out_file | grep "Current score:" | tail -n1 | awk '{print $NF}')
+            if [ $score -gt 0 ]; then
+                # only update score file if the score was > 0
+                echo -e "$score\t$name" >> high_scores.txt
+            fi
+            kill $gzdoom_pid
+            wait $gzdoom_pid >/dev/null 2>&1
+            clear
+            echo "                          =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
+            echo "                               You ran out of time! Your final score was $score..."
             echo "                          =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
             break
         fi
