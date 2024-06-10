@@ -5,6 +5,7 @@ name=lazy-points
 filename=$name-$version.pk3
 time_limit=180
 finish_bonus=500
+iwad='./doom.wad'
 
 draw_logo() {
     echo '                 =================     ===============     ===============   ========  ========'
@@ -64,29 +65,23 @@ while true; do
         exec $0
     fi
 
-
-    # sanitize name
+    # init new game
     name=$(echo "$name" | tr -cd '[:print:]' | cut -c1-30)
     echo "                                    Hi $name, loading DooM... good luck!"
     out_file=/tmp/doom.out
-    rm -f $out_file
+    echo "Current score: 0" > $out_file
     rm -f gzdoom.ini
     cp gzdoom_main.ini gzdoom.ini
-    iwad='./doom.wad'
-
     start_time=$(date +%s)
     stdbuf -o0 -- gzdoom \
         -file $filename \
         -iwad $iwad \
         -warp 1 1 \
         -config ./gzdoom.ini \
-        -nostartup >$out_file 2>&1 &
+        -nostartup >>$out_file 2>&1 &
     gzdoom_pid=$!
-    if [ ! -f $outfile ]; then
-        sleep 0.1
-    fi
 
-
+    # main loop
     while true; do
 
         if ! kill -0 "$gzdoom_pid" 2>/dev/null; then
