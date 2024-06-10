@@ -62,7 +62,7 @@ while true; do
         rank=$(echo $l | awk '{print $1}')
         score=$(echo $l | awk '{print $2}')
         name=$(echo $l | awk '{for (i=3; i<=NF; i++) printf $i (i==NF?RS:OFS)}')
-        echo -e "                                      $rank\t\t$score\t$name"
+        echo -e "                                      $rank \t$score\t$name"
     done
     echo ""
     echo "                                      Welcome! Enter your name to play: "
@@ -88,7 +88,7 @@ while true; do
         -iwad $iwad \
         -warp 1 1 \
         -config ./gzdoom.ini \
-        -nostartup >$out_file 2>&1&
+        -nostartup >$out_file 2>&1 &
     gzdoom_pid=$!
     if [ ! -f $outfile ]; then
         sleep 0.1
