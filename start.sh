@@ -101,10 +101,10 @@ while true; do
                 # add finish_bonus since they fionished the map
                 score=$(( $score + $finish_bonus ))
                 echo -e "$score\t$name" >> high_scores.txt
-                echo "                       *****************************************************************"
+            echo "                          =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
                 echo "                             $name, congratulations for completing the level!"
                 echo "                                         Your final score was $score"
-                echo "                       *****************************************************************"
+            echo "                          =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
                 echo ""
                 espeak "Congratulations, your final score was $score"
             fi
@@ -115,6 +115,7 @@ while true; do
 
         if grep -Eq "Degreelessness|Very Happy Ammo Added|No Clipping Mode|Power-up Toggled" $out_file; then
             skip_score=1
+            score=0
             kill $gzdoom_pid
             wait $gzdoom_pid >/dev/null 2>&1
             clear
@@ -132,12 +133,13 @@ while true; do
         map_name=$(echo "$map_string" | awk -F' - ' '{print $2}')
         if [ -n "$map_name" ] && [ "$map_name" != "Hangar" ]; then
             skip_score=1
+            score=0
             kill $gzdoom_pid
             wait $gzdoom_pid >/dev/null 2>&1
             clear
-            echo "                          =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
+            echo "                          XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
             echo "                               Sorry, we're playing map E1M1 only for this challenge."
-            echo "                          =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
+            echo "                          XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
             espeak "We are playing episode 1 map 1 only. Sorry."
             break
         fi
@@ -153,7 +155,7 @@ while true; do
             wait $gzdoom_pid >/dev/null 2>&1
             clear
             echo "                          =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
-            echo "                                        You died! Your final score was $score..."
+            echo "                                     You died! Your final score was $score..."
             echo "                          =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
             espeak "You died! Your final score was $score"
             break
