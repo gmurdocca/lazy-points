@@ -47,17 +47,18 @@ while true; do
     skip_score=0
     # show high scores
     draw_logo
+    score=0
     echo -e "\n                                      Rank:\tScore:\tName:\n"
     sort -k1,1nr high_scores.txt | awk '{print NR, $0}' | head -n10 | while read l; do
         rank=$(echo $l | awk '{print $1}')
         player_score=$(echo $l | awk '{print $2}')
         player_name=$(echo $l | awk '{for (i=3; i<=NF; i++) printf $i (i==NF?RS:OFS)}')
         prefix="             "
-        if [ "$player_name" == "$name" ] && [ $player_score -eq $score ]; then
+        if [ "$player_name" == "$name" ] && [ "$player_score" == "$score" ]; then
             prefix="Your rank -->"
             espeak "you made the top 10, well done" &
         fi
-        echo -e "                                  ${prefix} $rank \t$player_score\t$player_name"
+        echo -e "                   ${prefix}\t$rank \t$player_score\t$player_name"
     done
     echo ""
     echo    "                               Max time limit per game: $(($time_limit / 60)) minutes"
