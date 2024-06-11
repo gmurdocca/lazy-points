@@ -47,7 +47,6 @@ while true; do
     skip_score=0
     # show high scores
     draw_logo
-    score=0
     echo -e "\n                                      Rank:\tScore:\tName:\n"
     sort -k1,1nr high_scores.txt | awk '{print NR, $0}' | head -n10 | while read l; do
         rank=$(echo $l | awk '{print $1}')
@@ -69,6 +68,7 @@ while true; do
     fi
 
     # init new game
+    score=0
     name=$(echo "$name" | tr -cd '[:print:]' | cut -c1-30)
     echo "                                    Hi $name, loading DooM... good luck!"
     espeak "Welcome player. And good luck!" &
