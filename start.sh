@@ -1,8 +1,8 @@
 #!/bin/bash
 
 version=1.1
-name=lazy-points
-filename=$name-$version.pk3
+appname=lazy-points
+filename=$appname-$version.pk3
 time_limit=180
 finish_bonus=500
 iwad='./doom.wad'
@@ -30,10 +30,7 @@ draw_logo() {
 }
 
 if [ "$1" == "build" ]; then
-
-
     rm -f $filename
-
     zip $filename    \
         zscript/*.zs \
         *.md  \
@@ -53,9 +50,14 @@ while true; do
     echo -e "\n                                      Rank:\tScore:\tName:\n"
     sort -k1,1nr high_scores.txt | awk '{print NR, $0}' | head -n10 | while read l; do
         rank=$(echo $l | awk '{print $1}')
-        score=$(echo $l | awk '{print $2}')
-        name=$(echo $l | awk '{for (i=3; i<=NF; i++) printf $i (i==NF?RS:OFS)}')
-        echo -e "                                      $rank \t$score\t$name"
+        player_score=$(echo $l | awk '{print $2}')
+        player_name=$(echo $l | awk '{for (i=3; i<=NF; i++) printf $i (i==NF?RS:OFS)}')
+        prefix="             "
+        if [ "$player_name" == "$name" ] && [ $player_score -eq $score ]; then
+            prefix="Your rank -->"
+            espeak "you made the top 10, well done" &
+        fi
+        echo -e "                                  ${prefix} $rank \t$player_score\t$player_name"
     done
     echo ""
     echo    "                               Max time limit per game: $(($time_limit / 60)) minutes"
@@ -68,7 +70,7 @@ while true; do
     # init new game
     name=$(echo "$name" | tr -cd '[:print:]' | cut -c1-30)
     echo "                                    Hi $name, loading DooM... good luck!"
-    espeak "Welcome. And good luck!"
+    espeak "Welcome player. And good luck!" &
     out_file=/tmp/doom.out
     echo "Current score: 0" > $out_file
     rm -f gzdoom.ini
